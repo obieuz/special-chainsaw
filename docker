@@ -1,0 +1,1 @@
+docker run -dp 3306:3306 -e MYSQLI_ROOT_PASSWORD=123 mysql
