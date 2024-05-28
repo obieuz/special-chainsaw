@@ -11,7 +11,7 @@ router.get('/',auth,(req,res)=>{
         res.status(200).json({data:result,meta:{usersCount:result.length}})
     })
 });
-router.post('/',auth,(req,res)=> {
+router.post('/',(req,res)=> {
     const {login, password} = req.body;
     const token=uuid();
 
