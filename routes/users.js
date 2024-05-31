@@ -24,6 +24,7 @@ router.post('/',(req,res)=> {
             data: {
                 id: result.insertId,
                 login: login,
+                token:token,
             }
         });
     });
@@ -39,11 +40,14 @@ router.put("/",auth,(req,res)=>{
         if(result.length==0){
             return res.status(400).json({err: `User with id ${id} does not exist`});
         }
-        db.query(`UPDATE users SET login='${login ?? result[0].login}', password='${password ?? result[0].password}' WHERE userId=${id};`,(err,result)=> {
+        db.query(`UPDATE users SET login='${login ?? result[0].login}', password='${password ?? result[0].password}' WHERE userId=${id};`,(err)=> {
             if (err) {
                 return res.status(404).json({err: err});
             }
-            res.status(204).json()
+            res.status(200).json({data:{
+                    id:id,
+                    login:login ?? result[0].login,
+            }})
         });
     });
 });
@@ -60,7 +64,7 @@ router.delete("/",auth,(req,res)=>{
         if(result.affectedRows==0){
             return res.status(400).json({err:`User with id ${id} does not exist`});
         }
-        res.status(204).json();
+        res.status(200).json({message:"User with id "+id+" was deleted"});
     })
 })
 module.exports = router;

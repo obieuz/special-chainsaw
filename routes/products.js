@@ -40,15 +40,15 @@ router.put("/",auth,(req,res)=>{
         if (result.length==0){
             return res.status(400).json({err: `Product with id ${id} does not exist`});
         }
-        db.query(`UPDATE products SET name='${name ?? result[0].name}', description='${description ?? result[0].description}', price=${price ?? result[0].price} WHERE productId=${id};`,(err,result)=>{
+        db.query(`UPDATE products SET name='${name ?? result[0].name}', description='${description ?? result[0].description}', price=${price ?? result[0].price} WHERE productId=${id};`,(err)=>{
             if(err){
                 return res.status(404).json({err: err});
             }
             res.status(200).json({data:{
                     id:id,
-                    name:name,
-                    description:description,
-                    price:price
+                    name:name ?? result[0].name,
+                    description:description ?? result[0].description,
+                    price:price ?? result[0].price
                 }})
         })
     });
@@ -66,7 +66,7 @@ router.delete("/",auth,(req,res)=>{
         if(result.affectedRows==0){
             return res.status(400).json({err:`Product with id ${id} does not exist`});
         }
-        res.status(204).json();
+        res.status(200).json({message:"Product with id "+id+" was deleted"});
     })
 })
 module.exports = router;
